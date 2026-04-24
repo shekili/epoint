@@ -29,6 +29,16 @@ class EpointLog extends Model
         'reviewed',
     ];
 
+    protected function createLog(array $data, ?object $loggable = null): EpointLog
+    {
+        if ($loggable && method_exists($loggable, 'getMorphClass')) {
+            $data['model_type'] = $loggable->getMorphClass();
+            $data['model_id']   = $loggable->getKey();
+        }
+
+        return $this->create($data);
+    }
+
     // -----------------------------------------------------------------------
     // İlişkiler
     // -----------------------------------------------------------------------
